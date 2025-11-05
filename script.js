@@ -64,12 +64,16 @@ function showFormMessage(message, type) {
     
     // Insert message before the submit button
     const submitButton = contactForm.querySelector('button[type="submit"]');
-    contactForm.insertBefore(messageDiv, submitButton);
-    
-    // Auto-remove message after 5 seconds
-    setTimeout(() => {
-        messageDiv.remove();
-    }, 5000);
+    if (submitButton) {
+        contactForm.insertBefore(messageDiv, submitButton);
+        
+        // Auto-remove message after 5 seconds
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
 }
 
 // Add active class to navigation links on scroll
