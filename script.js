@@ -23,21 +23,53 @@ if (contactForm) {
         e.preventDefault();
         
         // Get form data
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
         
-        // Basic validation
-        if (name && email && message) {
-            // Show success message
-            alert('Thank you for your message! We will get back to you soon.');
-            
-            // Reset form
-            contactForm.reset();
-        } else {
-            alert('Please fill in all fields.');
+        // Email validation regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Validation
+        if (!name || !email || !message) {
+            showFormMessage('Please fill in all fields.', 'error');
+            return;
         }
+        
+        if (!emailRegex.test(email)) {
+            showFormMessage('Please enter a valid email address.', 'error');
+            return;
+        }
+        
+        // Show success message
+        showFormMessage('Thank you for your message! We will get back to you soon.', 'success');
+        
+        // Reset form
+        contactForm.reset();
     });
+}
+
+// Function to show form messages
+function showFormMessage(message, type) {
+    // Remove any existing message
+    const existingMessage = document.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create message element
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `form-message ${type}`;
+    messageDiv.textContent = message;
+    
+    // Insert message before the submit button
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    contactForm.insertBefore(messageDiv, submitButton);
+    
+    // Auto-remove message after 5 seconds
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 5000);
 }
 
 // Add active class to navigation links on scroll
